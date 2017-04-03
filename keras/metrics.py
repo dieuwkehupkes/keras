@@ -41,9 +41,13 @@ def sparse_top_k_categorical_accuracy(y_true, y_pred, k=5):
     return K.mean(K.in_top_k(y_pred, K.cast(K.max(y_true, axis=-1), 'int32'), k), axis=-1)
 
 
+def mean_squared_prediction_error(y_true, y_pred):
+    return K.mean(K.square(y_true - K.round(y_pred)))
+
 # Aliases
 
 mse = MSE = mean_squared_error
+mspe = MSPE = mean_squared_prediction_error
 mae = MAE = mean_absolute_error
 mape = MAPE = mean_absolute_percentage_error
 msle = MSLE = mean_squared_logarithmic_error

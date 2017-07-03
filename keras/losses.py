@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 import six
 from . import backend as K
+import theano.tensor as T
 from .utils.generic_utils import deserialize_keras_object
 
 
@@ -72,6 +73,13 @@ def cosine_proximity(y_true, y_pred):
     y_pred = K.l2_normalize(y_pred, axis=-1)
     return -K.mean(y_true * y_pred, axis=-1)
 
+def masked_mean_squared_error(y_true, y_pred):
+    # assume no prediction is required
+    # when output is 0
+    mask = T.set_subtensor(y_true[y_true.nonzero()], 1)
+    y_pred = y_pred*mask
+    mean = K.sum(K.square(y_pred - y_true))/K.sum(mask)
+    return mean
 
 # Aliases.
 
